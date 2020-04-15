@@ -4,6 +4,7 @@ const todoInput = document.querySelector(".todo-input");
 const todoButton = document.querySelector(".todo-button");
 const todoList = document.querySelector(".todo-list");
 const filter = document.querySelector(".filter-todo");
+const trashButton = document.querySelector(".delete-all-button");
 
 // Event Listeners
 
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", getTodos);
 todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filter.addEventListener("change", filterTodo);
+trashButton.addEventListener("click", deleteAll);
 
 // Functions
 
@@ -145,4 +147,18 @@ function removeLocalTodos(todo) {
     const todoIndex = todo.children[0].innerText;
     todos.splice(todos.indexOf(todoIndex), 1);
     localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+function deleteAll() {
+    const todos = todoList.childNodes;
+
+    if (todos.length <= 0) return;
+
+    todos.forEach(function (todo) {
+        todo.classList.add("fall");
+        todo.addEventListener("animationend", function () {
+            removeLocalTodos(todo);
+            todo.remove();
+        });
+    });
 }
